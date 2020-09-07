@@ -1,0 +1,54 @@
+***QUESTION A***
+
+The Total Number of orders shipped by Speedy Express: 54
+____________________________________________________________
+SELECT
+    s.ShipperName,
+    s.ShipperID,
+    COUNT(*) 'Total Orders'
+FROM Shippers AS s
+INNER JOIN Orders AS o on s.ShipperID = o.ShipperID
+GROUP BY 1
+ORDER BY 3;
+____________________________________________________________
+
+
+
+***QUESTION B***
+
+The Last Name of the Employee with the most orders: "Peacock"
+_____________________________________________________________
+WITH orders_count AS (SELECT 
+                          EmployeeID,
+                          COUNT(*) AS Total_Orders
+                      FROM Orders
+                      GROUP BY 1
+                      ORDER BY 2 DESC)
+SELECT
+    e.EmployeeID,
+    e.LastName,
+    e.FirstName,
+    oc.Total_Orders
+FROM orders_count AS oc
+INNER JOIN Employees AS e on oc.EmployeeID = e.EmployeeID;
+______________________________________________________________
+
+
+
+
+***QUESTION C***
+
+The Product that was ordered the most by customers in Germany: "Gorgonzola Telino"
+_______________________________________________________________
+SELECT
+    p.ProductID,
+    p.ProductName,
+    COUNT(*) AS 'Number of Orders'
+FROM Customers c
+INNER JOIN Orders o on c.CustomerID = o.CustomerID
+INNER JOIN OrderDetails od on od.OrderID = o.OrderID
+INNER JOIN Products p on p.ProductID = od.ProductID
+WHERE c.Country = 'Germany'
+GROUP BY 1,2
+ORDER BY 3 DESC;
+________________________________________________________________
